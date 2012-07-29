@@ -577,7 +577,7 @@ public class Compiler implements MessageConsumer {
 	baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
 	baseCommandCompiler.add("-DARDUINO=" + Base.REVISION);
 	baseCommandCompiler.add("-DENERGIA=" + Base.EREVISION);
-    } else {
+    } else if (arch == "arduino") {
 	baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
 	baseCommandCompiler.add(basePath + "avr-gcc",
 	baseCommandCompiler.add("-c", // compile, don't link
@@ -586,8 +586,11 @@ public class Compiler implements MessageConsumer {
 	baseCommandCompiler.add("-mmcu=" + boardPreferences.get("build.mcu"),
 	baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"),
 	baseCommandCompiler.add("-DARDUINO=" + Base.REVISION,
+    } else {
+	baseCommandCompiler.add(avrBasePath + "g++");
+	baseCommandCompiler.add("-c"); // compile, don't link
     }
-    
+
     for (int i = 0; i < includePaths.size(); i++) {
       baseCommandCompiler.add("-I" + (String) includePaths.get(i));
     }
