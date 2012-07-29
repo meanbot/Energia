@@ -242,7 +242,7 @@ public class Compiler implements MessageConsumer {
       "-O",
       "-R",
     }));
-    } else {
+    } else if (arch == "arduino") {
       baseCommandObjcopy = new ArrayList(Arrays.asList(new String[] {
         basePath + "avr-objcopy",
         "-O",
@@ -253,7 +253,7 @@ public class Compiler implements MessageConsumer {
     List commandObjcopy;
     if (arch == "msp430") {
       //nothing 
-    } else {
+    } else if (arch == "arduino") {
         // 5. extract EEPROM data (from EEMEM directive) to .eep file.
       sketch.setCompilingProgress(70);
       commandObjcopy = new ArrayList(baseCommandObjcopy);
@@ -269,17 +269,19 @@ public class Compiler implements MessageConsumer {
       execAsynchronously(commandObjcopy);
     }
     
-    // 6. build the .hex file
-    sketch.setCompilingProgress(80);
-    commandObjcopy = new ArrayList(baseCommandObjcopy);
-    commandObjcopy.add(2, "ihex");
-    commandObjcopy.add(".eeprom"); // remove eeprom data
-    commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
-    commandObjcopy.add(buildPath + File.separator + primaryClassName + ".hex");
-    execAsynchronously(commandObjcopy);
-    
+    if ((arch == "msp430") || (arch == "arduino")) {
+      // 6. build the .hex file
+      sketch.setCompilingProgress(80);
+      commandObjcopy = new ArrayList(baseCommandObjcopy);
+      commandObjcopy.add(2, "ihex");
+      commandObjcopy.add(".eeprom"); // remove eeprom data
+      commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
+      commandObjcopy.add(buildPath + File.separator + primaryClassName + ".hex");
+      execAsynchronously(commandObjcopy);
+    }
+
     sketch.setCompilingProgress(90);
-   
+
     return true;
   }
 
