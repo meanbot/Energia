@@ -605,36 +605,32 @@ public class Compiler implements MessageConsumer {
   static private List getCommandCompilerC(String basePath, List includePaths,
     String sourceName, String objectName, Map<String, String> boardPreferences) {
 	 String arch = Base.getArch();
-     List baseCommandCompiler;
+     List baseCommandCompiler = new ArrayList(); ;
 
       if (arch == "msp430") {
-      baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-        basePath + "msp430-gcc",
-        "-c", // compile, don't link
-        "-g", // include debugging info (so errors include line numbers)
-        "-Os", // optimize for size
-        Preferences.getBoolean("build.verbose") ? "-Wall" : "-w", // show warnings if verbose
-        "-ffunction-sections", // place each function in its own section
-        "-fdata-sections",
-        "-mmcu=" + boardPreferences.get("build.mcu"),
-        "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-        "-DARDUINO=" + Base.REVISION,
-        "-DENERGIA=" + Base.EREVISION,
-      }));
+	baseCommandCompiler(basePath + "msp430-gcc");
+	baseCommandCompiler("-c"); // compile, don't link
+	baseCommandCompiler("-g"); // include debugging info (so errors include line numbers)
+	baseCommandCompiler("-Os"); // optimize for size
+	baseCommandCompiler(Preferences.getBoolean("build.verbose") ? "-Wall" : "-w"); // show warnings if verbose
+	baseCommandCompiler("-ffunction-sections"); // place each function in its own section
+	baseCommandCompiler("-fdata-sections");
+	baseCommandCompiler("-mmcu=" + boardPreferences.get("build.mcu"));
+	baseCommandCompiler("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
+	baseCommandCompiler("-DARDUINO=" + Base.REVISION);
+	baseCommandCompiler("-DENERGIA=" + Base.EREVISION);
       } else { // default to avr
-        baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-        basePath + "avr-gcc",
-        "-c", // compile, don't link
-        "-g", // include debugging info (so errors include line numbers)
-        "-Os", // optimize for size
-        Preferences.getBoolean("build.verbose") ? "-Wall" : "-w", // show warnings if verbose
-        "-ffunction-sections", // place each function in its own section
-        "-fdata-sections",
-        "-mmcu=" + boardPreferences.get("build.mcu"),
-        "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-        "-MMD", // output dependancy info
-        "-DARDUINO=" + Base.REVISION,
-        }));
+	baseCommandCompiler(basePath + "avr-gcc");
+	baseCommandCompiler("-c"); // compile, don't link
+	baseCommandCompiler("-g"); // include debugging info (so errors include line numbers)
+	baseCommandCompiler("-Os"); // optimize for size
+	baseCommandCompiler(Preferences.getBoolean("build.verbose") ? "-Wall" : "-w"); // show warnings if verbose
+	baseCommandCompiler("-ffunction-sections"); // place each function in its own section
+	baseCommandCompiler("-fdata-sections");
+	baseCommandCompiler("-mmcu=" + boardPreferences.get("build.mcu"));
+	baseCommandCompiler("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
+	baseCommandCompiler("-MMD"); // output dependancy info
+	baseCommandCompiler("-DARDUINO=" + Base.REVISION);
     }
 		
     for (int i = 0; i < includePaths.size(); i++) {
