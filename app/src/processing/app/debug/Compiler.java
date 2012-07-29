@@ -203,29 +203,24 @@ public class Compiler implements MessageConsumer {
         optRelax = new String(",--relax");
     }
     sketch.setCompilingProgress(60);
-    List baseCommandLinker;
+    List baseCommandLinker = new ArrayList();
     if (arch == "msp430") { 
-        List objects = new ArrayList(baseCommandAR);
-        baseCommandLinker = new ArrayList(Arrays.asList(new String[] {
-        basePath + "msp430-gcc",
-        "-Os",
+      baseCommandLinker.add(basePath + "msp430-gcc");
+      baseCommandLinker.add("-Os");
         // msp430 linker has an issue with main residing in an archive, cora.a in this case.
         // -u,main works around this by forcing the linker to find a definition for main.
-        "-Wl,-gc-sections,-u,main", 
-        "-mmcu=" + boardPreferences.get("build.mcu"),
-        "-o",
-        buildPath + File.separator + primaryClassName + ".elf"
-      }));
+      baseCommandLinker.add("-Wl,-gc-sections,-u,main");
+      baseCommandLinker.add("-mmcu=" + boardPreferences.get("build.mcu"));
+      baseCommandLinker.add("-o");
     } else {
-      baseCommandLinker = new ArrayList(Arrays.asList(new String[] {
-        basePath + "avr-gcc",
-        "-Os",
-      "-Wl,--gc-sections"+optRelax,
-        "-mmcu=" + boardPreferences.get("build.mcu"),
-        "-o",
-        buildPath + File.separator + primaryClassName + ".elf"
-        }));
+      baseCommandLinker.add(basePath + "avr-gcc",
+      baseCommandLinker.add("-Os",
+      baseCommandLinker.add("-Wl,--gc-sections"+optRelax,
+      baseCommandLinker.add("-mmcu=" + boardPreferences.get("build.mcu"),
+      baseCommandLinker.add("-o",
     }
+
+    baseCommandLinker.add(buildPath + File.separator + primaryClassName + ".elf");
 
     for (File file : objectFiles) {
       baseCommandLinker.add(file.getAbsolutePath());
