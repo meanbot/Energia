@@ -178,8 +178,11 @@ public class Compiler implements MessageConsumer {
   List baseCommandAR = new ArrayList();
   if(arch == "msp430") { 
       baseCommandAR.add(BasePath + "msp430-ar");
-    } else {
+    } else if (arch == "arduino") {
       baseCommandAR.add(BasePath + "avr-ar");
+    } else {
+      baseCommandAR.add(BasePath + "ar");
+    }
   }
 
   baseCommandAR.add("rcs");
