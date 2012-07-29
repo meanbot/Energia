@@ -175,20 +175,15 @@ public class Compiler implements MessageConsumer {
 
   String arch = Base.getArch();
   String runtimeLibraryName = buildPath + File.separator + "core.a";
-  List baseCommandAR;
+  List baseCommandAR = new ArrayList();
   if(arch == "msp430") { 
-    baseCommandAR = new ArrayList(Arrays.asList(new String[] {
-      basePath + "msp430-ar",
-      "rcs",
-      runtimeLibraryName
-    }));
+      baseCommandAR.add(BasePath + "msp430-ar");
     } else {
-      baseCommandAR = new ArrayList(Arrays.asList(new String[] {
-        basePath + "avr-ar",
-        "rcs",
-        runtimeLibraryName
-    }));
+      baseCommandAR.add(BasePath + "avr-ar");
   }
+
+  baseCommandAR.add("rcs");
+  baseCommandAR.add(runtimeLibraryName);
 
   for(File file : coreObjectFiles) {
      List commandAR = new ArrayList(baseCommandAR);
