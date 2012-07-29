@@ -212,12 +212,15 @@ public class Compiler implements MessageConsumer {
       baseCommandLinker.add("-Wl,-gc-sections,-u,main");
       baseCommandLinker.add("-mmcu=" + boardPreferences.get("build.mcu"));
       baseCommandLinker.add("-o");
-    } else {
+    } else if (arch == "arduino") {
       baseCommandLinker.add(basePath + "avr-gcc",
       baseCommandLinker.add("-Os",
       baseCommandLinker.add("-Wl,--gc-sections"+optRelax,
       baseCommandLinker.add("-mmcu=" + boardPreferences.get("build.mcu"),
       baseCommandLinker.add("-o",
+    } else {
+      baseCommandLinker.add(BasePath + "g++");
+      baseCommandLinker.add("-o");
     }
 
     baseCommandLinker.add(buildPath + File.separator + primaryClassName + ".elf");
