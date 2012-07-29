@@ -565,30 +565,27 @@ public class Compiler implements MessageConsumer {
     String sourceName, String objectName, Map<String, String> boardPreferences) {
     String arch = Base.getArch();
     
-    List baseCommandCompiler;
+    List baseCommandCompiler = new ArrayList();
     
     if (arch == "msp430") {
     	//as per
     	//http://mspgcc.sourceforge.net/manual/x1522.html
-        baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-          basePath + "msp430-gcc",
-          "-c", // compile, don't link
-          "-g", // include debugging info (so errors include line numbers)
-          "-mmcu=" + boardPreferences.get("build.mcu"),
-          "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-          "-DARDUINO=" + Base.REVISION,
-          "-DENERGIA=" + Base.EREVISION,
-        }));
+	baseCommandCompiler.add(basePath + "msp430-gcc");
+	baseCommandCompiler.add("-c"); // compile, don't link
+	baseCommandCompiler.add("-g"); // include debugging info (so errors include line numbers)
+	baseCommandCompiler.add("-mmcu=" + boardPreferences.get("build.mcu"));
+	baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
+	baseCommandCompiler.add("-DARDUINO=" + Base.REVISION);
+	baseCommandCompiler.add("-DENERGIA=" + Base.EREVISION);
     } else {
-        baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-           basePath + "avr-gcc",
-          "-c", // compile, don't link
-          "-g", // include debugging info (so errors include line numbers)
-          "-assembler-with-cpp",
-          "-mmcu=" + boardPreferences.get("build.mcu"),
-          "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-          "-DARDUINO=" + Base.REVISION,
-        }));
+	baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
+	baseCommandCompiler.add(basePath + "avr-gcc",
+	baseCommandCompiler.add("-c", // compile, don't link
+	baseCommandCompiler.add("-g", // include debugging info (so errors include line numbers)
+	baseCommandCompiler.add("-assembler-with-cpp",
+	baseCommandCompiler.add("-mmcu=" + boardPreferences.get("build.mcu"),
+	baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"),
+	baseCommandCompiler.add("-DARDUINO=" + Base.REVISION,
     }
     
     for (int i = 0; i < includePaths.size(); i++) {
