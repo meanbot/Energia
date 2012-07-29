@@ -666,7 +666,7 @@ public class Compiler implements MessageConsumer {
 	baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
 	baseCommandCompiler.add("-DARDUINO=" + Base.REVISION);
 	baseCommandCompiler.add("-DENERGIA=" + Base.EREVISION);
-    } else { // default to avr
+    } else if (arch = "arduino") { // default to avr
 	baseCommandCompiler.add(basePath + "avr-g++");
 	baseCommandCompiler.add("-c"); // compile, don't link
 	baseCommandCompiler.add("-g"); // include debugging info (so errors include line numbers)
@@ -679,6 +679,9 @@ public class Compiler implements MessageConsumer {
 	baseCommandCompiler.add("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
 	baseCommandCompiler.add("-MMD"); // output dependancy info
 	baseCommandCompiler.add("-DARDUINO=" + Base.REVISION);
+    } else {
+      baseCommandCompilerCPP.add(avrBasePath + "g++");
+      baseCommandCompilerCPP.add("-c"); // compile, don't link
     }
 
     for (int i = 0; i < includePaths.size(); i++) {
