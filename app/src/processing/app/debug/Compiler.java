@@ -631,8 +631,11 @@ public class Compiler implements MessageConsumer {
 	baseCommandCompiler("-DF_CPU=" + boardPreferences.get("build.f_cpu"));
 	baseCommandCompiler("-MMD"); // output dependancy info
 	baseCommandCompiler("-DARDUINO=" + Base.REVISION);
-    }
-		
+      } else {
+	baseCommandCompiler.add(avrBasePath + "gcc");
+	baseCommandCompiler.add("-c"); // compile, don't link
+      }
+
     for (int i = 0; i < includePaths.size(); i++) {
       baseCommandCompiler.add("-I" + (String) includePaths.get(i));
     }
