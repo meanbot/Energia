@@ -198,8 +198,9 @@ public class PdePreprocessor {
   protected void writeProgram(PrintStream out, String program, List<String> prototypes) {
  
     String arch = Base.getArch();
-    if(arch == "msp430") out.print("#include \"Energia.h\"\n");    
-    else out.print("#include \"Arduino.h\"\n");    
+    if(arch == "msp430") out.print("#include \"Energia.h\"\n");
+    else if (arch == "arduino" ) out.print("#include \"Arduino.h\"\n");
+    else out.print("#include \"virtual_main.h\"\n");
     
     // print user defined prototypes
     for (int i = 0; i < prototypes.size(); i++) {

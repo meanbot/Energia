@@ -25,6 +25,7 @@ package processing.app;
 
 import processing.app.debug.AvrdudeUploader;
 import processing.app.debug.MSP430Uploader;
+import processing.app.debug.VirtualUploader;
 import processing.app.debug.Compiler;
 import processing.app.debug.RunnerException;
 import processing.app.debug.Sizer;
@@ -1705,8 +1706,10 @@ public class Sketch {
     //
     if(Base.getArch() == "msp430"){
     	uploader = new MSP430Uploader();
-    } else {
+    } else if (Base.getArch() == "arduino") {
     	uploader = new AvrdudeUploader();
+    } else {
+    	uploader = new VirtualUploader();
     }
 
     boolean success = uploader.uploadUsingPreferences(buildPath,
