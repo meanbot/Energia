@@ -1034,6 +1034,8 @@ public class Base {
               //System.out.println("Switching to " + target + ":" + board);
               String n = (String)getValue("target");
               String o = Preferences.get("target");
+              Preferences.set("target", (String) getValue("target"));
+              Preferences.set("board", (String) getValue("board"));
               if(!n.equals(o)) {
             	  String targetLibDir = new String("");
             	  if(n.equals("msp430")) 
@@ -1041,8 +1043,6 @@ public class Base {
             	  librariesFolder = getContentFile(targetLibDir + "libraries");
             	  onArchChanged();
               }
-              Preferences.set("target", (String) getValue("target"));
-              Preferences.set("board", (String) getValue("board"));
               onBoardOrPortChange();
               Sketch.buildSettingChanged();
             }
@@ -1097,6 +1097,10 @@ public class Base {
         menu.add(item);
       }
     }
+    if(Preferences.get("target").equals("userspace"))
+	menu.setEnabled(false);
+    else
+	menu.setEnabled(true);
   }
 
 

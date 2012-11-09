@@ -91,6 +91,8 @@ public class Editor extends JFrame implements RunnerListener {
   static JMenu sketchbookMenu;
   static JMenu examplesMenu;
   static JMenu importMenu;
+  static JMenu programmerMenu;
+  static JMenuItem burnbootloaderItem;
 
   // these menus are shared so that the board and serial port selections
   // are the same for all windows (since the board and serial port that are
@@ -695,19 +697,22 @@ public class Editor extends JFrame implements RunnerListener {
     menu.add(serialMenu);
     menu.addSeparator();
     
-    JMenu programmerMenu = new JMenu(_("Programmer"));
+    programmerMenu = new JMenu(_("Programmer"));
     base.rebuildProgrammerMenu(programmerMenu);
     menu.add(programmerMenu);
 
-    if(!Preferences.get("target").equals("msp430")) {
-      item = new JMenuItem(_("Burn Bootloader"));
-      item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
+    burnbootloaderItem = new JMenuItem(_("Burn Bootloader"));
+    item.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
           handleBurnBootloader();
         }
       });
-      menu.add(item);
-    }
+    menu.add(burnbootloaderItem);
+    if(Preferences.get("target").equals("arduino"))
+	burnbootloaderItem.setEnabled(true);
+    else
+	burnbootloaderItem.setEnabled(false);
+
     
     menu.addMenuListener(new MenuListener() {
       public void menuCanceled(MenuEvent e) {}
@@ -2619,6 +2624,12 @@ public class Editor extends JFrame implements RunnerListener {
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
   protected void onArchChanged() {
       base.rebuildImportMenu(importMenu);
+      base.rebuildProgrammerMenu(programmerMenu);
+    if(Preferences.get("target").equals("arduino"))
+	burnbootloaderItem.setEnabled(true);
+    else
+	burnbootloaderItem.setEnabled(false);
+
   }
   
   protected void onBoardOrPortChange() {
