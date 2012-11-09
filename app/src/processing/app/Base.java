@@ -1012,10 +1012,19 @@ public class Base {
 	  }	  
   }
 
+  static JMenu arduinoboardsMenu;
+  static JMenu msp430boardsMenu;
+  static JMenu userspaceboardsMenu;
   
   public void rebuildBoardsMenu(JMenu menu) {
     //System.out.println("rebuilding boards menu");
+    arduinoboardsMenu = new JMenu(_("Arduino"));
+    msp430boardsMenu = new JMenu(_("MSP430"));
+    userspaceboardsMenu = new JMenu(_("Linux"));
     menu.removeAll();      
+    menu.add(arduinoboardsMenu);
+    menu.add(msp430boardsMenu);
+    menu.add(userspaceboardsMenu);
     ButtonGroup group = new ButtonGroup();
     for (Target target : targetsTable.values()) {
       for (String board : target.getBoards().keySet()) {
@@ -1046,7 +1055,18 @@ public class Base {
           item.setSelected(true);
         }
         group.add(item);
-        menu.add(item);
+	if(target.getName().equals("arduino")){
+	    arduinoboardsMenu.add(item);
+	}
+	else if (target.getName().equals("msp430")){
+	    msp430boardsMenu.add(item);
+	}
+	else if (target.getName().equals("userspace")){
+	    userspaceboardsMenu.add(item);
+	}
+	else
+	    menu.add(item);
+
       }
     }
   }
